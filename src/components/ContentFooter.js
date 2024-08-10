@@ -10,13 +10,13 @@ export default function ContentFooter() {
 
         <ul className='filters'>
             <li>
-                <a className='selected'>All</a>
+                <a className='selected' href='#'>All</a>
             </li>
             <li>
-                <a>Active</a>
+                <a href='#'>Active</a>
             </li>
             <li>
-                <a>Complete</a>
+                <a href='#'>Complete</a>
             </li>
         </ul>
 
