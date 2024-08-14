@@ -16,19 +16,24 @@ const todosSlice = createSlice ({
         },
     ]
     },
-    reducers: {
+    reducers: {  // Reducer, state'in nasıl güncelleneceğini tanımlar. Action type'larına göre yeni state'i oluşturur.
         addTodo: (state, action) => {
             state.items.push(action.payload);
         },
         toggle: (state, action) => {
-            const {id} = action.payload;
+            const {id} = action.payload; //Action, bir olayın veya işlemin temsilcisidir. Bir şeyi eklemek, silmek veya güncellemek istediğinizde bir action oluşturursunuz.
 
             const item = state.items.find(item => item.id === id);
 
             item.completed = !item.completed; 
+        },
+        destroy: (state, action) =>{
+            const id = action.payload;
+            const filtered = state.items.filter((item) => item.id!== id);
+            state.items =filtered;
         }
     },
 });
 
-export const { addTodo, toggle } = todosSlice.actions;
+export const { addTodo, toggle, destroy } = todosSlice.actions;
 export default todosSlice.reducer;
