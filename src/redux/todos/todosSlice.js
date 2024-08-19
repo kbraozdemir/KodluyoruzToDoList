@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, nanoid } from '@reduxjs/toolkit';
 
 const todosSlice = createSlice ({
     name: 'todos',
@@ -18,8 +18,19 @@ const todosSlice = createSlice ({
     activeFilter: 'all',
     },
     reducers: {  // Reducer, state'in nasıl güncelleneceğini tanımlar. Action type'larına göre yeni state'i oluşturur.
-        addTodo: (state, action) => {
-            state.items.push(action.payload);
+        addTodo: {
+            reducer:(state, action) => {
+                state.items.push(action.payload);
+            },
+            prepare: ({title}) => {
+                return {
+                    payload: {
+                        id: nanoid(),
+                        completed: false,
+                        title,
+                    },
+                };
+            },
         },
         toggle: (state, action) => {
             const {id} = action.payload; //Action, bir olayın veya işlemin temsilcisidir. Bir şeyi eklemek, silmek veya güncellemek istediğinizde bir action oluşturursunuz.
