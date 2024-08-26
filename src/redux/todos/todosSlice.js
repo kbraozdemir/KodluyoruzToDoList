@@ -1,20 +1,17 @@
-import { createSlice, nanoid } from '@reduxjs/toolkit';
+import { createSlice, nanoid, createAsyncThunk } from '@reduxjs/toolkit';
+
+export const getTodosAsync = createAsyncThunk('todos/getTodosAsync', async () => {
+    const res = await fetch('http://localhost:7000/todos');
+    return await res.json();
+});
 
 const todosSlice = createSlice ({
     name: 'todos',
     initialState: {
-        items: [
-            {
-            id: 1,
-            title: 'Learn React',
-            completed: true,
-        },
-        {
-            id: 2,
-            title: 'Read a book',
-            completed: false,
-        },
-    ],
+        items: [],
+        isLoading: false,
+        error: null,
+        
     activeFilter: 'all',
     },
     reducers: {  // Reducer, state'in nasıl güncelleneceğini tanımlar. Action type'larına göre yeni state'i oluşturur.
@@ -53,6 +50,20 @@ const todosSlice = createSlice ({
             state.items = filtered;
         }
     },
+    extraReducers: (builder) => {  //builder kullanarak daha esnek bir şekilde yönetmek, asenkron işlemlerinin daha temiz bir şekilde ele alınmasını sağlar.
+        builder
+            .addCase(getTodosAsync.pending, (state, action) => {
+                state.isLoading = true;
+            })
+            .addCase(getTodosAsync.fulfilled, (state, action) => {
+                state.items = action.payload;
+                state.isLoading = false;
+            })
+            .addCase(getTodosAsync.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.error.message;
+            });
+    }
 });
 
 export const selectFilteredTodos = (state) => {
