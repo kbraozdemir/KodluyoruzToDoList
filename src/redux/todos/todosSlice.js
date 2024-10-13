@@ -27,7 +27,7 @@ const todosSlice = createSlice ({
         items: [],
         isLoading: false,
         error: null,
-        activeFilter: 'all',
+        activeFilter: localStorage.getItem(),
         addNewTodo: {
             isLoading: false,
             error: false,
